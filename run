@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+set +abeuvx
+
+cmd=$1
+PROJ_NAME='peg-data-pipeline'
+
+display_help() {
+    echo "Usage: $0 [option]" >&2
+    echo
+    echo " Available options:"
+    echo "   docker-build          "
+    echo "   shell                 "
+    echo "   setup                 "
+    echo "   sls                   "
+    echo "   sls-dev               "
+    echo "   sls-prod              "
+    echo "   deploy-config-dev     "
+    echo "   deploy-config-prod    "
+    echo
+}
+
+case $cmd in
+
+    '-h')
+        display_help
+        exit 0
+        ;;
+
+    'docker-build')
+        docker build -t $PROJ_NAME .
+        ;;
+
+    'shell')
+        docker run --rm -it \
+        -v $(pwd):/root/$PROJ_NAME  \
+        -e AWS_ACCESS_KEY_ID \
+        -e AWS_SECRET_ACCESS_KEY \
+        -e AWS_SESSION_TOKEN \
+        -e AWS_REGION \
+        -e PYTHONPATH=/root/python-requirements \
+        $PROJ_NAME:latest bash
+        ;;
+
+    'sls')
+        docker run --rm -it \
+        -v $(pwd):/root/$PROJ_NAME \
+        -e AWS_ACCESS_KEY_ID \
+        -e AWS_SECRET_ACCESS_KEY \
+        -e AWS_SESSION_TOKEN \
+        -e AWS_REGION \
+        $PROJ_NAME:latest sls "$@"
+        ;;
+
+    'sls-deploy-prod')
+        SLS_DEBUG=* sls deploy -v  --force --stage prod
+        ;;
+
+    'sls-deploy-dev')
+        SLS_DEBUG=* sls deploy -v  --force --stage dev
+        ;;
+
+    '')
+        echo "Command required"
+        display_help
+        exit 1
+        ;;
+
+    *)
+        echo "Unknown command: $cmd"
+        display_help
+        exit 1
+        ;;
+
+esac
