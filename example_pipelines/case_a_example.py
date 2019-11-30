@@ -14,7 +14,7 @@ def run():
     log.info("START processing case study A")
 
     customer_pipeline: PipelineBase = PipelineBase(
-        ingestor=IngestCsv(source_name='', source_path='case_a_data/Customers_Information.csv'),
+        ingestor=IngestCsv(source_name='', source_path='../../peg_case_studies/case_a/case_a_data/Customers_Information.csv'),
         transformer=None,
         outputter=None
     )

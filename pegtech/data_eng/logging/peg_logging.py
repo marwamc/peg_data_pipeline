@@ -38,14 +38,7 @@ def setup_logging(default_level=logging.INFO, log_prefix=''):
         'formatters': {
             'utc': {
                 '()': UTCFormatter,
-                'format': '{"pipeline_name": "%(pipeline_name)s", '
-                          '"request_status": "%(request_status)s", '
-                          '"timestamp": "%(asctime)s", '
-                          '"log_level": "%(levelname)s", '
-                          '"name": "%(name)s", '
-                          '"file_name": "%(filename)s:%(lineno)s", '
-                          '"environment": "%(environment)s", '
-                          '"message": "%(message)s"}'
+                'format': f"%(pipeline_name)s|%(asctime)s|%(request_status)s|%(levelname)s|%(name)s|%(message)s"
             }
         },
         "filters": {

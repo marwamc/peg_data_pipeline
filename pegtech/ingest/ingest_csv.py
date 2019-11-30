@@ -18,7 +18,9 @@ class IngestCsv(IngestBase):
 
     def ingest(self) -> DataFrame:
         self.log.info("Ingesting...")
-        data: DataFrame = read_csv(self.source_path, sep='\t')
-        self.log.info(f"Ingested data: \n{data.info()}")
+        data: DataFrame = read_csv(self.source_path, sep=',')
+        data.info()
+        #self.log.info(f"Ingested data: \n{data.info()}")
+        #data.describe()
         return data
 
